@@ -14,7 +14,7 @@ class TDIconPage extends StatefulWidget {
 class _TDIconPageState extends State<TDIconPage> {
   bool showBorder = false;
 
-  Iterable iconList = [];
+  List<MapEntry<String, IconData>> iconList = [];
 
   var isLoading = false;
 
@@ -22,7 +22,7 @@ class _TDIconPageState extends State<TDIconPage> {
   void initState() {
     super.initState();
 
-    iconList = TDIcons.all.values;
+    iconList = TDIcons.all.entries.toList();
   }
 
   @override
@@ -56,8 +56,7 @@ class _TDIconPageState extends State<TDIconPage> {
             child: const Wrap(
               children: [
                 TDText('筛选Icon请前往TDesign官网(长按网址可复制):'),
-                SelectableText(
-                    'https://tdesign.tencent.com/icons')
+                SelectableText('https://tdesign.tencent.com/icons')
               ],
             ),
           ),
@@ -69,10 +68,10 @@ class _TDIconPageState extends State<TDIconPage> {
                 isLoading = true;
               });
               Future.delayed(const Duration(milliseconds: 30), () {
-                var list = [];
-                TDIcons.all.forEach((key, value) {
-                  if (value.name.contains(text)) {
-                    list.add(value);
+                var list = <MapEntry<String, IconData>>[];
+                TDIcons.all.entries.forEach((entry) {
+                  if (entry.key.contains(text)) {
+                    list.add(entry);
                   }
                 });
                 setState(() {
@@ -83,7 +82,7 @@ class _TDIconPageState extends State<TDIconPage> {
             },
             onClearClick: (_) {
               setState(() {
-                iconList = TDIcons.all.values;
+                iconList = TDIcons.all.entries.toList();
               });
             },
           ),
@@ -130,9 +129,9 @@ class _TDIconPageState extends State<TDIconPage> {
                                       ? TDTheme.of(context).brandDisabledColor
                                       : Colors.transparent,
                                 ),
-                                child: Icon(item, size: 32),
+                                child: Icon(item.value, size: 32),
                               ),
-                              TDText(item.name)
+                              TDText(item.key)
                             ],
                           ),
                         );
